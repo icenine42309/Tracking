@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="fil" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cavinti ResQ-Track - Patient Care Form</title>
+    <style>
+        /* THEME VARIABLES */
+        [data-theme="dark"] {
+            --primary: #38bdf8;
+            --primary-light: #0ea5e9;
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --field-bg: #111827;
+            --input-bg: #1f2937;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --input-hover: #374151;
+            --table-header: #374151;
+            --save-bg: #064e3b;
+            --save-text: #34d399;
+            --save-border: #059669;
+        }
+
+        [data-theme="light"] {
+            --primary: #0284c7;
+            --primary-light: #0369a1;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --field-bg: #f8fafc;
+            --input-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #cbd5e1;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --warning: #d97706;
+            --input-hover: #f1f5f9;
+            --table-header: #e2e8f0;
+            --save-bg: #dcfce7;
+            --save-text: #166534;
+            --save-border: #86efac;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            padding: 10px;
+            padding-bottom: 70px;
+            color: var(--text-main);
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .theme-toggle-btn {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: var(--input-bg);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            padding: 5px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .theme-toggle-btn:active { opacity: 0.7; }
+
+        h2 {
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        h3 {
+            color: var(--text-main);
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .save-indicator {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--save-text);
+            background: var(--save-bg);
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-top: 4px;
+            border: 1px solid var(--save-border);
+        }
+
+        fieldset {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: var(--field-bg);
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        legend {
+            font-weight: 700;
+            color: var(--primary);
+            padding: 0 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 8px;
+        }
+
+        label {
+            display: block;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            color: var(--text-muted);
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            background-color: var(--input-bg);
+            color: var(--text-main);
+            transition: all 0.2s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+        }
+
+        input.dt-trigger {
+            background-color: var(--input-hover);
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
+
+        .sub-category-title {
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 8px;
+            margin-bottom: 4px;
+            display: block;
+            border-left: 3px solid var(--primary-light);
+            padding-left: 5px;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+            gap: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            font-size: 11px;
+            color: var(--text-main);
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            padding: 5px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.1s;
+        }
+
+        .checkbox-item:hover {
+            background: var(--input-hover);
+        }
+
+        .checkbox-item input {
+            margin-right: 6px;
+            width: 14px;
+            height: 14px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .patient-card-header, .companion-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-remove-patient, .btn-remove-companion {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid #991b1b;
+            padding: 3px 8px;
+            font-size: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .btn-add-patient, .btn-add-companion {
+            background-color: var(--primary-light);
+            color: #ffffff;
+            border: 1px solid var(--primary);
+            padding: 9px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .btn-add-patient:hover, .btn-add-companion:hover { opacity: 0.9; }
+
+        .action-btns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-top: 15px;
+            background: var(--field-bg);
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .btn {
+            border: none;
+            padding: 11px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            transition: opacity 0.2s;
+        }
+        .btn:active { opacity: 0.8; }
+
+        .btn-save-record { background-color: var(--success); color: white; }
+        .btn-report { background-color: var(--primary-light); color: white; }
+        .btn-export { background-color: #0284c7; color: white; }
+        .btn-import { background-color: var(--warning); color: #ffffff; }
+        .btn-print { background-color: #059669; color: white; }
+        .btn-reset { background-color: var(--danger); color: white; grid-column: span 2; }
+
+        .records-section {
+            margin-top: 15px;
+            background: var(--field-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .records-section h4 {
+            font-size: 12px;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        .record-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            background: var(--input-bg);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .record-table th, .record-table td {
+            border-bottom: 1px solid var(--border);
+            padding: 8px;
+            text-align: left;
+            color: var(--text-main);
+        }
+        .record-table th {
+            background-color: var(--table-header);
+        }
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 10px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .btn-sm-load { background-color: var(--primary-light); color: white; }
+        .btn-sm-del { background-color: #7f1d1d; color: #fca5a5; }
+
+        .report-box {
+            display: none;
+            margin-top: 15px;
+            padding: 12px;
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            background-color: var(--field-bg);
+        }
+        .report-box h4 {
+            font-size: 12px;
+            color: var(--success);
+            margin-bottom: 6px;
+        }
+        .report-box textarea {
+            min-height: 220px;
+            font-family: monospace;
+            font-size: 11px;
+            background: var(--input-bg);
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+        .btn-copy {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            padding: 10px;
+            font-size: 12px;
+            font-weight: 700;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .custom-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(2px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+        .custom-modal-card {
+            background: var(--card-bg);
+            width: 90%;
+            max-width: 320px;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            text-align: center;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+        .custom-modal-title {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .cal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .cal-btn {
+            background: var(--input-hover);
+            color: var(--text-main);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+        .cal-day-label { font-size: 10px; font-weight: 700; color: var(--text-muted); padding: 4px 0; }
+        .cal-cell { padding: 8px 0; font-size: 11px; border-radius: 4px; cursor: pointer; background: var(--input-bg); color: var(--text-main); font-weight: 600; border: 1px solid var(--border); }
+        .cal-cell.selected { background: var(--primary-light); color: #fff; border-color: var(--primary); }
+        .cal-cell.empty { background: transparent; cursor: default; border: none; }
+
+        .time-select-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            margin: 12px 0;
+        }
+        .time-select-container select {
+            width: 70px;
+            padding: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .modal-action-btns { display: flex; gap: 8px; margin-top: 10px; }
+        .btn-modal-ok { flex: 1; background-color: var(--success) !important; color: white !important; border: none; padding: 9px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+        .btn-modal-cancel { flex: 1; background-color: var(--danger) !important; color: white !important; border: none; padding: 9px; border-radius: 6px; font-weight: 700; cursor: pointer; }
+
+        @page { size: A4 portrait; margin: 4mm 5mm; }
+        @media print {
+            body { background-color: #fff; padding: 0; font-size: 7.5pt; color: #000; }
+            .container { box-shadow: none; max-width: 100%; width: 100%; padding: 0; margin: 0; background: #fff; border: none; color: #000; }
+            .header { margin-bottom: 3px; border-bottom: 1px solid #000; }
+            .theme-toggle-btn { display: none !important; }
+            h2 { font-size: 9.5pt; color: #000; }
+            h3 { font-size: 8.5pt; color: #000; margin-bottom: 2px; }
+            fieldset { border: 1px solid #444; background-color: #fff; padding: 2px 4px; margin-bottom: 3px; border-radius: 3px; }
+            legend { font-size: 7pt; color: #000; padding: 0 2px; font-weight: bold; }
+            .form-group { margin-bottom: 1px; }
+            label { font-size: 6.5pt; color: #111; margin-bottom: 1px; }
+            input[type="text"], input[type="number"], select, textarea {
+                padding: 1px 2px; font-size: 7.5pt; border: 1px solid #777; border-radius: 2px; height: 16px; line-height: 16px; background: #fff; color: #000;
+            }
+            textarea { min-height: 24px; height: 26px; }
+            .sub-category-title { font-size: 7pt; color: #000; margin-top: 1px; margin-bottom: 1px; text-decoration: underline; border-left: none; padding-left: 0; }
+            .checkbox-group { grid-template-columns: repeat(auto-fill, minmax(75px, 1fr)); gap: 1px; }
+            .checkbox-item { font-size: 6.5pt; background: none; border: none; padding: 0; color: #000; }
+            .checkbox-item input { width: 9px; height: 9px; margin-right: 2px; }
+            .action-btns, .report-box, .custom-modal-overlay, .save-indicator, .records-section, .btn-add-patient, .btn-remove-patient, .btn-add-companion, .btn-remove-companion { display: none !important; }
+            .print-grid-main { display: grid; grid-template-columns: 49% 50%; gap: 1%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <button type="button" id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
+        <h2>MUNICIPAL DISASTER RISK REDUCTION AND MANAGEMENT OFFICE</h2>
+        <h3>CAVINTI RESQ-TRACK • PATIENT CARE FORM</h3>
+        <span id="autoSaveStatus" class="save-indicator">🟢 Auto-save Active</span>
+    </div>
+
+    <form id="pcrForm">
+        <div class="print-grid-main">
+            <div class="left-col">
+                <fieldset>
+                    <legend>INCIDENT & DISPATCH DATA</legend>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Date</label>
+                            <input type="text" id="p-date" class="dt-trigger" readonly placeholder="YYYY-MM-DD" onclick="openCustomDatePicker(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Patient/Incident No.</label>
+                            <input type="text" id="p-no">
+                        </div>
+                    </div>
+                    
+                    <span class="sub-category-title">Time Logs</span>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Dispatched</label>
+                            <input type="text" id="t-dispatched" class="dt-trigger" readonly placeholder="--:--" onclick="openCustomTimePicker(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>Responded</label>
+                            <input type="text" id="t-responded" class="dt-trigger" readonly placeholder="--:--" onclick="openCustomTimePicker(this)">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>On Scene</label>
+                            <input type="text" id="t-onscene" class="dt-trigger" readonly placeholder="--:--" onclick="openCustomTimePicker(this)">
+                        </div>
+                        <div class="form-group">
+                            <label>On Health Facility</label>
+                            <input type="text" id="t-facility" class="dt-trigger" readonly placeholder="--:--" onclick="openCustomTimePicker(this)">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Back to OpCen</label>
+                        <input type="text" id="t-backopcen" class="dt-trigger" readonly placeholder="--:--" onclick="openCustomTimePicker(this)">
+                    </div>
+
+                    <div class="form-group" style="margin-top: 6px;">
+                        <label>Location of Incident</label>
+                        <input type="text" id="p-location">
+                    </div>
+                </fieldset>
+
+                <div id="patientsContainer"></div>
+                <button type="button" class="btn-add-patient" onclick="addNewPatientSection()">➕ Magdagdag ng Pasyente</button>
+            </div>
+
+            <div class="right-col">
+                <div id="companionsContainer"></div>
+                <button type="button" class="btn-add-companion" onclick="addNewCompanionSection()">➕ Magdagdag ng Companion</button>
+
+                <fieldset>
+                    <legend>NATURE AND TYPE OF EVENT</legend>
+                    
+                    <span class="sub-category-title">Accident</span>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Self Accident"> Self</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Auto Accident"> Auto</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Bicycle Accident"> Bicycle</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Jeepney Accident"> Jeepney</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Van Accident"> Van</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Truck Accident"> Truck</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Pedestrian"> Pedestrian</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="E-Bike Accident"> E-Bike</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Bus Accident"> Bus</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Motorcycle Accident"> Motorcycle</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Tricycle Accident"> Tricycle</label>
+                    </div>
+
+                    <span class="sub-category-title">Medical</span>
+                    <div class="checkbox-group" style="grid-template-columns: repeat(3, 1fr);">
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Abrasion"> Abrasion</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Dislocation"> Dislocation</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Tenderness"> Tenderness</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Cough"> Cough</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Seizure"> Seizure</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Vomiting"> Vomiting</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Amputation"> Amputation</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Fracture"> Fracture</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Abdominal Pain"> Abd. Pain</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Dengue"> Dengue</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Stroke"> Stroke</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Avulsion"> Avulsion</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Head Injury"> Head Injury</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Asthma"> Asthma</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Diabetic"> Diabetic</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Breathing Problem"> Breathing Prob.</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Bleeding"> Bleeding</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Laceration"> Laceration</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Back Pain"> Back Pain</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Dizziness"> Dizziness</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Child Birth"> Child Birth</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Bruises"> Bruises</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Puncture"> Puncture</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Chest Pain"> Chest Pain</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Epileptic"> Epileptic</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="High BP"> High BP</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Burn"> Burn</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Swelling"> Swelling</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Convulsion"> Convulsion</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Fever"> Fever</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Low BP"> Low BP</label>
+                    </div>
+
+                    <span class="sub-category-title">Crime & Disaster</span>
+                    <div class="checkbox-group">
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Gunshot"> Gunshot</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Hit & Run"> Hit & Run</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Riot"> Riot</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Suicide"> Suicide</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Stabbing"> Stabbing</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Physical Injury"> Phys. Injury</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Fire-Residential"> Fire-Res.</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Fire-Commercial"> Fire-Comm.</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Flooding"> Flooding</label>
+                        <label class="checkbox-item"><input type="checkbox" class="nature-cb" value="Earthquake"> Earthquake</label>
+                    </div>
+
+                    <div class="form-group" style="margin-top: 6px;">
+                        <label>Others (Specify)</label>
+                        <input type="text" id="p-others-nature">
+                    </div>
+
+                    <div class="form-group" style="margin-top: 8px;">
+                        <label>Details / Kwento ng Pangyayari</label>
+                        <textarea id="p-narrative" placeholder="Isulat dito ang kuwento ng nangyari..."></textarea>
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend>ASSESSMENT & INTERVENTIONS</legend>
+                    <div class="form-group">
+                        <label>Assessment/s</label>
+                        <textarea id="p-assessment" placeholder="Assessment..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Interventions</label>
+                        <textarea id="p-interventions" placeholder="Gawang aksyon..."></textarea>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+        <fieldset style="margin-top: 4px;">
+            <legend>RESPONDERS TEAM & VEHICLE DETAILS</legend>
+            <div class="grid-2">
+                <div class="form-group"><label>Ambulance / Vehicle Used</label><input type="text" id="e-ambulance"></div>
+                <div class="form-group"><label>Driver</label><input type="text" id="e-driver"></div>
+            </div>
+            <div class="grid-2">
+                <div class="form-group"><label>Team Leader</label><input type="text" id="e-tl"></div>
+                <div class="form-group"><label>Members</label><input type="text" id="e-members"></div>
+            </div>
+            <div class="form-group">
+                <label>Supplies / Equipment Used</label>
+                <input type="text" id="e-supplies">
+            </div>
+        </fieldset>
+
+        <div class="action-btns">
+            <button type="button" class="btn btn-save-record" onclick="saveToHistoryList()">💾 SAVE</button>
+            <button type="button" class="btn btn-report" onclick="generateMessengerReport()">📲 GENERATE REPORT</button>
+            <button type="button" class="btn btn-export" onclick="exportJsonFile()">📥 DOWNLOAD (.JSON)</button>
+            <button type="button" class="btn btn-import" onclick="document.getElementById('importFileElem').click()">📤 IMPORT (.JSON)</button>
+            <input type="file" id="importFileElem" accept=".json" style="display:none" onchange="importJsonFile(event)">
+            <button type="button" class="btn btn-print" onclick="window.print()">🖨 PRINT / PDF</button>
+            <button type="button" class="btn btn-reset" onclick="clearSavedData()">🗑️ NEW FORM</button>
+        </div>
+
+        <div id="messengerReportBox" class="report-box">
+            <h4>📋 Messenger Summary Report</h4>
+            <textarea id="messengerText" readonly></textarea>
+            <button type="button" class="btn-copy" onclick="copyToMessenger()">📋 COPY FOR MESSENGER</button>
+        </div>
+
+        <div class="records-section">
+            <h4>📁 Saved Records History</h4>
+            <table class="record-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Incident #</th>
+                        <th>Patient Name</th>
+                        <th>Aksyon</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    <tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Walang naka-save na record.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </form>
+</div>
+
+<!-- MODALS -->
+<div id="msgModalOverlay" class="custom-modal-overlay">
+    <div class="custom-modal-card">
+        <div id="msgModalTitle" class="custom-modal-title">KOMPIRMASYON</div>
+        <div id="msgModalBody" style="font-size: 12px; margin-bottom: 15px; line-height: 1.4; white-space: pre-line;"></div>
+        <div class="modal-action-btns">
+            <button type="button" id="msgModalCancelBtn" class="btn-modal-cancel" onclick="closeMsgModal(false)">CANCEL</button>
+            <button type="button" id="msgModalOkBtn" class="btn-modal-ok" onclick="closeMsgModal(true)">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="dateModalOverlay" class="custom-modal-overlay">
+    <div class="custom-modal-card">
+        <div class="custom-modal-title">SELECT DATE</div>
+        <div class="cal-header">
+            <button type="button" class="cal-btn" onclick="prevMonth()">&lt;</button>
+            <span id="calMonthYear"></span>
+            <button type="button" class="cal-btn" onclick="nextMonth()">&gt;</button>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="modal-action-btns">
+            <button type="button" class="btn-modal-cancel" onclick="closeDatePicker(true)">CANCEL</button>
+            <button type="button" class="btn-modal-ok" onclick="confirmDatePicker()">OK</button>
+        </div>
+    </div>
+</div>
+
+<div id="timeModalOverlay" class="custom-modal-overlay">
+    <div class="custom-modal-card">
+        <div class="custom-modal-title">SELECT TIME</div>
+        <div class="time-select-container">
+            <select id="timeHour"></select>
+            <span>:</span>
+            <select id="timeMinute"></select>
+            <select id="timeAmpm">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+            </select>
+        </div>
+        <div class="modal-action-btns">
+            <button type="button" class="btn-modal-cancel" onclick="closeTimePicker(true)">CANCEL</button>
+            <button type="button" class="btn-modal-ok" onclick="confirmTimePicker()">OK</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleTheme() {
+        const html = document.documentElement;
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('mdrrmo_theme', newTheme);
+        updateThemeButtonText(newTheme);
+    }
+
+    function updateThemeButtonText(theme) {
+        const btn = document.getElementById('themeToggleBtn');
+        if (btn) {
+            btn.innerText = theme === 'dark' ? '☀️ Light' : '🌙 Dark';
+        }
+    }
+
+    function loadSavedTheme() {
+        const savedTheme = localStorage.getItem('mdrrmo_theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        updateThemeButtonText(savedTheme);
+    }
+
+    let activeInputTarget = null;
+    let msgModalCallback = null;
+
+    function showCustomConfirm(message, title, onConfirm) {
+        document.getElementById('msgModalTitle').innerText = title || "KOMPIRMASYON";
+        document.getElementById('msgModalBody').innerText = message;
+        document.getElementById('msgModalCancelBtn').style.display = 'block';
+        document.getElementById('msgModalOkBtn').style.display = 'block';
+        msgModalCallback = onConfirm;
+        document.getElementById('msgModalOverlay').style.display = 'flex';
+    }
+
+    function showCustomAlert(message, title) {
+        document.getElementById('msgModalTitle').innerText = title || "ANUNSYO";
+        document.getElementById('msgModalBody').innerText = message;
+        document.getElementById('msgModalCancelBtn').style.display = 'none';
+        document.getElementById('msgModalOkBtn').style.display = 'block';
+        msgModalCallback = null;
+        document.getElementById('msgModalOverlay').style.display = 'flex';
+    }
+
+    function closeMsgModal(isOk) {
+        document.getElementById('msgModalOverlay').style.display = 'none';
+        if (isOk && typeof msgModalCallback === 'function') msgModalCallback();
+        msgModalCallback = null;
+    }
+
+    let currDate = new Date();
+    let selectedDateStr = "";
+
+    function openCustomDatePicker(inputElem) {
+        activeInputTarget = inputElem;
+        currDate = new Date();
+        renderCalendar();
+        document.getElementById('dateModalOverlay').style.display = 'flex';
+    }
+
+    function renderCalendar() {
+        const calGrid = document.getElementById('calGrid');
+        const calMonthYear = document.getElementById('calMonthYear');
+        calGrid.innerHTML = '';
+        const year = currDate.getFullYear();
+        const month = currDate.getMonth();
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        calMonthYear.innerText = `${monthNames[month]} ${year}`;
+
+        ["S", "M", "T", "W", "T", "F", "S"].forEach(d => {
+            const lbl = document.createElement('div');
+            lbl.className = 'cal-day-label';
+            lbl.innerText = d;
+            calGrid.appendChild(lbl);
+        });
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const totalDays = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) {
+            const empty = document.createElement('div');
+            empty.className = 'cal-cell empty';
+            calGrid.appendChild(empty);
+        }
+
+        for (let d = 1; d <= totalDays; d++) {
+            const cell = document.createElement('div');
+            cell.className = 'cal-cell';
+            cell.innerText = d;
+            let mStr = (month + 1).toString().padStart(2, '0');
+            let dStr = d.toString().padStart(2, '0');
+            let dateVal = `${year}-${mStr}-${dStr}`;
+
+            if (activeInputTarget && activeInputTarget.value === dateVal) {
+                cell.classList.add('selected');
+                selectedDateStr = dateVal;
+            }
+
+            cell.onclick = () => {
+                document.querySelectorAll('.cal-cell').forEach(c => c.classList.remove('selected'));
+                cell.classList.add('selected');
+                selectedDateStr = dateVal;
+            };
+            calGrid.appendChild(cell);
+        }
+    }
+
+    function prevMonth() { currDate.setMonth(currDate.getMonth() - 1); renderCalendar(); }
+    function nextMonth() { currDate.setMonth(currDate.getMonth() + 1); renderCalendar(); }
+    function confirmDatePicker() {
+        if (activeInputTarget && selectedDateStr) {
+            activeInputTarget.value = selectedDateStr;
+            autoSaveData();
+        }
+        closeDatePicker(false);
+    }
+    function closeDatePicker(isCancel) {
+        if (isCancel && activeInputTarget) activeInputTarget.value = "";
+        document.getElementById('dateModalOverlay').style.display = 'none';
+        activeInputTarget = null;
+        selectedDateStr = "";
+    }
+
+    function initTimePickerOptions() {
+        const hSelect = document.getElementById('timeHour');
+        const mSelect = document.getElementById('timeMinute');
+        hSelect.innerHTML = ''; mSelect.innerHTML = '';
+        for (let h = 1; h <= 12; h++) hSelect.innerHTML += `<option value="${h.toString().padStart(2, '0')}">${h.toString().padStart(2, '0')}</option>`;
+        for (let m = 0; m < 60; m += 5) mSelect.innerHTML += `<option value="${m.toString().padStart(2, '0')}">${m.toString().padStart(2, '0')}</option>`;
+    }
+    initTimePickerOptions();
+
+    function openCustomTimePicker(inputElem) { activeInputTarget = inputElem; document.getElementById('timeModalOverlay').style.display = 'flex'; }
+    function confirmTimePicker() {
+        if (activeInputTarget) {
+            activeInputTarget.value = `${document.getElementById('timeHour').value}:${document.getElementById('timeMinute').value} ${document.getElementById('timeAmpm').value}`;
+            autoSaveData();
+        }
+        closeTimePicker(false);
+    }
+    function closeTimePicker(isCancel) {
+        if (isCancel && activeInputTarget) activeInputTarget.value = "";
+        document.getElementById('timeModalOverlay').style.display = 'none';
+        activeInputTarget = null;
+    }
+
+    let patientCount = 0;
+    function createPatientHtml(idNum, data = {}) {
+        const fieldset = document.createElement('fieldset');
+        fieldset.className = 'patient-fieldset';
+        fieldset.setAttribute('data-patient-id', idNum);
+        let removeBtnHtml = idNum > 1 ? `<button type="button" class="btn-remove-patient" onclick="removePatientSection(this)">🗑️ Tanggalin</button>` : '';
+
+        fieldset.innerHTML = `
+            <legend>
+                <div class="patient-card-header">
+                    <span>PATIENT ${idNum} - INFO & VITALS</span>
+                    ${removeBtnHtml}
+                </div>
+            </legend>
+            <div class="form-group"><label>Full Name</label><input type="text" id="p${idNum}-name" value="${data[`p${idNum}-name`] || ''}" placeholder="Apelyido, Pangalan"></div>
+            <div class="grid-3">
+                <div class="form-group"><label>Age</label><input type="number" id="p${idNum}-age" value="${data[`p${idNum}-age`] || ''}"></div>
+                <div class="form-group"><label>Gender</label><select id="p${idNum}-gender"><option value="">-Select-</option><option value="Male" ${data[`p${idNum}-gender`] === 'Male' ? 'selected' : ''}>Male</option><option value="Female" ${data[`p${idNum}-gender`] === 'Female' ? 'selected' : ''}>Female</option></select></div>
+                <div class="form-group"><label>Birth Date</label><input type="text" id="p${idNum}-bday" class="dt-trigger" value="${data[`p${idNum}-bday`] || ''}" readonly placeholder="YYYY-MM-DD" onclick="openCustomDatePicker(this)"></div>
+            </div>
+            <div class="form-group"><label>Address</label><input type="text" id="p${idNum}-address" value="${data[`p${idNum}-address`] || ''}"></div>
+            <span class="sub-category-title">Vitals & Consciousness</span>
+            <div class="form-group">
+                <div class="checkbox-group" style="grid-template-columns: repeat(4, 1fr);">
+                    <label class="checkbox-item"><input type="checkbox" class="p${idNum}-consciousness-cb" value="Alert"> Alert</label>
+                    <label class="checkbox-item"><input type="checkbox" class="p${idNum}-consciousness-cb" value="Verbal"> Verbal</label>
+                    <label class="checkbox-item"><input type="checkbox" class="p${idNum}-consciousness-cb" value="Pain"> Pain</label>
+                    <label class="checkbox-item"><input type="checkbox" class="p${idNum}-consciousness-cb" value="Unresponsive"> Unresp.</label>
+                </div>
+            </div>
+            <div class="grid-6">
+                <div class="form-group"><label>Time</label><input type="text" id="p${idNum}-v-time" class="dt-trigger" value="${data[`p${idNum}-v-time`] || ''}" readonly placeholder="--:--" onclick="openCustomTimePicker(this)"></div>
+                <div class="form-group"><label>BP</label><input type="text" id="p${idNum}-v-bp" value="${data[`p${idNum}-v-bp`] || ''}" placeholder="120/80"></div>
+                <div class="form-group"><label>RR</label><input type="text" id="p${idNum}-v-rr" value="${data[`p${idNum}-v-rr`] || ''}"></div>
+                <div class="form-group"><label>PR</label><input type="text" id="p${idNum}-v-pr" value="${data[`p${idNum}-v-pr`] || ''}"></div>
+                <div class="form-group"><label>Temp</label><input type="text" id="p${idNum}-v-temp" value="${data[`p${idNum}-v-temp`] || ''}"></div>
+                <div class="form-group"><label>SPO2</label><input type="text" id="p${idNum}-v-spo2" value="${data[`p${idNum}-v-spo2`] || ''}"></div>
+            </div>
+        `;
+        return fieldset;
+    }
+
+    function addNewPatientSection(data = {}) {
+        patientCount++;
+        document.getElementById('patientsContainer').appendChild(createPatientHtml(patientCount, data));
+    }
+
+    function removePatientSection(btn) {
+        showCustomConfirm('Sigurado ka bang tanggalin ang pasyenteng ito?', 'TANGGALIN', () => {
+            btn.closest('fieldset').remove();
+            reindexPatients();
+            autoSaveData();
+        });
+    }
+
+    function reindexPatients() {
+        const fieldsets = document.querySelectorAll('#patientsContainer .patient-fieldset');
+        patientCount = 0;
+        fieldsets.forEach((fs, index) => {
+            const newId = index + 1;
+            patientCount = newId;
+            fs.setAttribute('data-patient-id', newId);
+            fs.querySelector('legend').innerHTML = `<div class="patient-card-header"><span>PATIENT ${newId} - INFO & VITALS</span>${newId > 1 ? '<button type="button" class="btn-remove-patient" onclick="removePatientSection(this)">🗑️ Tanggalin</button>' : ''}</div>`;
+            fs.querySelectorAll('input, select').forEach(input => {
+                let parts = input.id.split('-');
+                if (parts.length > 1) { parts[0] = `p${newId}`; input.id = parts.join('-'); }
+                if (input.className.includes('-consciousness-cb')) input.className = `p${newId}-consciousness-cb`;
+            });
+        });
+    }
+
+    let companionCount = 0;
+    function createCompanionHtml(idNum, data = {}) {
+        const fieldset = document.createElement('fieldset');
+        fieldset.className = 'companion-fieldset';
+        fieldset.setAttribute('data-companion-id', idNum);
+        let removeBtnHtml = idNum > 1 ? `<button type="button" class="btn-remove-companion" onclick="removeCompanionSection(this)">🗑️ Tanggalin</button>` : '';
+
+        fieldset.innerHTML = `
+            <legend>
+                <div class="companion-card-header">
+                    <span>COMPANION ${idNum}</span>
+                    ${removeBtnHtml}
+                </div>
+            </legend>
+            <div class="grid-2">
+                <div class="form-group"><label>Full Name</label><input type="text" id="c${idNum}-name" value="${data[`c${idNum}-name`] || ''}"></div>
+                <div class="form-group"><label>Relasyon</label><input type="text" id="c${idNum}-relation" value="${data[`c${idNum}-relation`] || ''}" placeholder="Hal. Asawa"></div>
+            </div>
+            <div class="grid-3">
+                <div class="form-group"><label>Age</label><input type="number" id="c${idNum}-age" value="${data[`c${idNum}-age`] || ''}"></div>
+                <div class="form-group"><label>Sex</label><select id="c${idNum}-sex"><option value="">-Select-</option><option value="Male" ${data[`c${idNum}-sex`] === 'Male' ? 'selected' : ''}>Male</option><option value="Female" ${data[`c${idNum}-sex`] === 'Female' ? 'selected' : ''}>Female</option></select></div>
+                <div class="form-group"><label>Address</label><input type="text" id="c${idNum}-address" value="${data[`c${idNum}-address`] || ''}"></div>
+            </div>
+        `;
+        return fieldset;
+    }
+
+    function addNewCompanionSection(data = {}) {
+        companionCount++;
+        document.getElementById('companionsContainer').appendChild(createCompanionHtml(companionCount, data));
+    }
+
+    function removeCompanionSection(btn) {
+        showCustomConfirm('Sigurado ka bang tanggalin ang companion na ito?', 'TANGGALIN', () => {
+            btn.closest('fieldset').remove();
+            reindexCompanions();
+            autoSaveData();
+        });
+    }
+
+    function reindexCompanions() {
+        const fieldsets = document.querySelectorAll('#companionsContainer .companion-fieldset');
+        companionCount = 0;
+        fieldsets.forEach((fs, index) => {
+            const newId = index + 1;
+            companionCount = newId;
+            fs.setAttribute('data-companion-id', newId);
+            fs.querySelector('legend').innerHTML = `<div class="companion-card-header"><span>COMPANION ${newId}</span>${newId > 1 ? '<button type="button" class="btn-remove-companion" onclick="removeCompanionSection(this)">🗑️ Tanggalin</button>' : ''}</div>`;
+            fs.querySelectorAll('input, select').forEach(input => {
+                let parts = input.id.split('-');
+                if (parts.length > 1) { parts[0] = `c${newId}`; input.id = parts.join('-'); }
+            });
+        });
+    }
+
+    function getFormDataObject() {
+        const formData = {};
+        document.querySelectorAll('#pcrForm input[type="text"], #pcrForm input[type="number"], #pcrForm select, #pcrForm textarea').forEach(el => {
+            if (el.id) formData[el.id] = el.value;
+        });
+        const checkboxes = {};
+        document.querySelectorAll('#pcrForm input[type="checkbox"]').forEach((cb, idx) => {
+            checkboxes[cb.id || `${cb.className}_${cb.value}_${idx}`] = cb.checked;
+        });
+        formData._checkboxes = checkboxes;
+        formData._patientCount = patientCount;
+        formData._companionCount = companionCount;
+        return formData;
+    }
+
+    function populateFormFromObject(formData) {
+        if (!formData) return;
+        const pContainer = document.getElementById('patientsContainer');
+        pContainer.innerHTML = ''; patientCount = 0;
+        for (let i = 1; i <= (formData._patientCount || 1); i++) addNewPatientSection(formData);
+
+        const cContainer = document.getElementById('companionsContainer');
+        cContainer.innerHTML = ''; companionCount = 0;
+        for (let i = 1; i <= (formData._companionCount || 1); i++) addNewCompanionSection(formData);
+
+        document.querySelectorAll('#pcrForm input[type="text"], #pcrForm input[type="number"], #pcrForm select, #pcrForm textarea').forEach(el => {
+            if (el.id && formData[el.id] !== undefined) el.value = formData[el.id];
+        });
+
+        if (formData._checkboxes) {
+            document.querySelectorAll('#pcrForm input[type="checkbox"]').forEach((cb, idx) => {
+                let key = cb.id || `${cb.className}_${cb.value}_${idx}`;
+                if (formData._checkboxes[key] !== undefined) cb.checked = formData._checkboxes[key];
+            });
+        }
+    }
+
+    function autoSaveData() {
+        localStorage.setItem('mdrrmo_pcr_draft', JSON.stringify(getFormDataObject()));
+        const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        const statusEl = document.getElementById('autoSaveStatus');
+        if (statusEl) statusEl.innerText = `🟢 Auto-saved (${timeStr})`;
+    }
+
+    function loadFromPhone() {
+        loadSavedTheme();
+        const saved = localStorage.getItem('mdrrmo_pcr_draft');
+        if (saved) {
+            try { populateFormFromObject(JSON.parse(saved)); } catch (e) { console.error(e); }
+        } else {
+            addNewPatientSection();
+            addNewCompanionSection();
+        }
+        renderHistoryTable();
+    }
+
+    function clearSavedData() {
+        showCustomConfirm('Gusto mo bang linisin ang form para sa bagong entry?', 'BAGONG FORM', () => {
+            localStorage.removeItem('mdrrmo_pcr_draft');
+            document.getElementById('pcrForm').reset();
+            document.getElementById('patientsContainer').innerHTML = '';
+            document.getElementById('companionsContainer').innerHTML = '';
+            patientCount = 0; companionCount = 0;
+            addNewPatientSection(); addNewCompanionSection();
+            document.getElementById('messengerReportBox').style.display = 'none';
+        });
+    }
+
+    function getHistoryList() { const list = localStorage.getItem('mdrrmo_pcr_history'); return list ? JSON.parse(list) : []; }
+
+    function saveToHistoryList() {
+        const formData = getFormDataObject();
+        const history = getHistoryList();
+        history.unshift({ id: Date.now().toString(), date: formData['p-date'] || 'No Date', pNo: formData['p-no'] || 'No Inc. #', pName: formData['p1-name'] || 'Unnamed', data: formData });
+        localStorage.setItem('mdrrmo_pcr_history', JSON.stringify(history));
+        renderHistoryTable();
+        showCustomAlert('✅ Naka-save na sa History List!', 'SUCCESS');
+    }
+
+    function renderHistoryTable() {
+        const history = getHistoryList();
+        const tbody = document.getElementById('historyTableBody');
+        tbody.innerHTML = '';
+        if (history.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--text-muted);">Walang naka-save na record.</td></tr>`;
+            return;
+        }
+        history.forEach(rec => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td>${rec.date}</td><td>${rec.pNo}</td><td>${rec.pName}</td><td><button type="button" class="btn-sm btn-sm-load" onclick="loadHistoryRecord('${rec.id}')">📂 Edit</button> <button type="button" class="btn-sm btn-sm-del" onclick="deleteHistoryRecord('${rec.id}')">🗑️</button></td>`;
+            tbody.appendChild(tr);
+        });
+    }
+
+    function loadHistoryRecord(id) {
+        const rec = getHistoryList().find(r => r.id === id);
+        if (rec) { populateFormFromObject(rec.data); autoSaveData(); window.scrollTo({ top: 0, behavior: 'smooth' }); showCustomAlert(`📂 Na-load ang record ni: ${rec.pName}`, 'LOADED'); }
+    }
+
+    function deleteHistoryRecord(id) {
+        showCustomConfirm('Burahin ang record na ito sa listahan?', 'BURAHIN', () => {
+            localStorage.setItem('mdrrmo_pcr_history', JSON.stringify(getHistoryList().filter(r => r.id !== id)));
+            renderHistoryTable();
+        });
+    }
+
+    function exportJsonFile() {
+        const formData = getFormDataObject();
+        const blob = new Blob([JSON.stringify(formData, null, 2)], { type: 'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `PCR_${formData['p-date'] || 'Data'}_${(formData['p1-name'] || 'Patient').replace(/[^a-zA-Z0-9]/g, '_')}.json`;
+        a.click();
+    }
+
+    function importJsonFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try { populateFormFromObject(JSON.parse(e.target.result)); autoSaveData(); showCustomAlert('✅ Na-import na ang file!', 'SUCCESS'); }
+            catch (err) { showCustomAlert('❌ Error: Invalid PCR JSON file.', 'ERROR'); }
+        };
+        reader.readAsText(file);
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadFromPhone();
+        setInterval(autoSaveData, 5000);
+    });
+
+    function autoFormatStory(text) {
+        if (!text) return '';
+        return text.trim().replace(/[ \t]+/g, ' ').replace(/\n\s*\n/g, '\n').replace(/(^\s*|[.!?]\s+)([a-z])/g, (m, s, c) => s + c.toUpperCase());
+    }
+
+    function generateMessengerReport() {
+        const date = document.getElementById('p-date').value.trim();
+        const pNo = document.getElementById('p-no').value.trim();
+        const location = document.getElementById('p-location').value.trim();
+
+        let blocks = [];
+        let natureList = [];
+        document.querySelectorAll('.nature-cb:checked').forEach(cb => natureList.push(cb.value));
+        const othersNature = document.getElementById('p-others-nature').value.trim();
+        if (othersNature) natureList.push(othersNature);
+
+        let reportTitle = natureList.some(n => n.toLowerCase().includes('accident')) ? "VEHICULAR ACCIDENT REPORT" : "MEDICAL REPORT";
+        let headerText = reportTitle;
+        let meta = [];
+        if (date) meta.push(`Date: ${date}`);
+        if (pNo) meta.push(`Report No: ${pNo}`);
+        if (meta.length > 0) headerText += `\n${meta.join(' | ')}`;
+        blocks.push(headerText);
+
+        let timeArr = [];
+        ['dispatched', 'responded', 'onscene', 'facility', 'backopcen'].forEach(t => {
+            let val = document.getElementById(`t-${t}`).value.trim();
+            if (val) timeArr.push(`  • ${t.charAt(0).toUpperCase() + t.slice(1)}: ${val}`);
+        });
+        if (timeArr.length > 0 || location) {
+            let tText = timeArr.length > 0 ? `⏰ Time Logs:\n` + timeArr.join('\n') : '';
+            if (location) tText += (tText ? `\n` : '') + `📍 Location: ${location}`;
+            blocks.push(tText);
+        }
+
+        for (let i = 1; i <= patientCount; i++) {
+            const name = document.getElementById(`p${i}-name`)?.value.trim();
+            if (!name) continue;
+            let pLines = [`👤 Patient ${i}: ${name} (${document.getElementById(`p${i}-age`).value.trim()}yo, ${document.getElementById(`p${i}-gender`).value.trim()})`];
+            const bday = document.getElementById(`p${i}-bday`).value.trim();
+            const address = document.getElementById(`p${i}-address`).value.trim();
+            if (bday) pLines.push(`• Birthdate: ${bday}`);
+            if (address) pLines.push(`• Address: ${address}`);
+
+            let locList = [];
+            document.querySelectorAll(`.p${i}-consciousness-cb:checked`).forEach(cb => locList.push(cb.value));
+            let vitals = [];
+            if (locList.length > 0) vitals.push(`LOC: ${locList.join(', ')}`);
+            ['bp', 'pr', 'rr', 'spo2', 'temp'].forEach(v => {
+                let val = document.getElementById(`p${i}-v-${v}`).value.trim();
+                if (val) vitals.push(`${v.toUpperCase()}: ${val}`);
+            });
+            if (vitals.length > 0) pLines.push(`• Vitals: ${vitals.join(' | ')}`);
+            blocks.push(pLines.join('\n'));
+        }
+
+        for (let i = 1; i <= companionCount; i++) {
+            const name = document.getElementById(`c${i}-name`)?.value.trim();
+            if (!name) continue;
+            let cLines = [`👥 Companion ${i}: ${name} (${document.getElementById(`c${i}-relation`).value.trim()})`];
+            let sub = [];
+            let age = document.getElementById(`c${i}-age`).value.trim();
+            let sex = document.getElementById(`c${i}-sex`).value.trim();
+            if (age) sub.push(`${age}yo`);
+            if (sex) sub.push(sex);
+            if (sub.length > 0) cLines.push(`• Age/Sex: ${sub.join(', ')}`);
+            let address = document.getElementById(`c${i}-address`).value.trim();
+            if (address) cLines.push(`• Address: ${address}`);
+            blocks.push(cLines.join('\n'));
+        }
+
+        const rawNarrative = document.getElementById('p-narrative').value;
+        const formattedNarrative = autoFormatStory(rawNarrative);
+        if (natureList.length > 0 || formattedNarrative) {
+            let ev = natureList.length > 0 ? `🚨 Nature of Event: ${natureList.join(', ')}` : '';
+            if (formattedNarrative) ev += (ev ? `\n\n` : '') + `📖 Incident Details:\n${formattedNarrative}`;
+            blocks.push(ev);
+        }
+
+        const assessment = document.getElementById('p-assessment').value.trim();
+        const interventions = document.getElementById('p-interventions').value.trim();
+        if (assessment || interventions) {
+            let act = assessment ? `🩺 Assessment: ${assessment}` : '';
+            if (interventions) act += (act ? `\n` : '') + `🛠️ Interventions: ${interventions}`;
+            blocks.push(act);
+        }
+
+        let teamArr = [];
+        ['ambulance', 'tl', 'driver', 'members', 'supplies'].forEach(e => {
+            let val = document.getElementById(`e-${e}`).value.trim();
+            if (val) teamArr.push(`• ${e.charAt(0).toUpperCase() + e.slice(1)}: ${val}`);
+        });
+        if (teamArr.length > 0) blocks.push(`👨‍🚒 Responders Team:\n${teamArr.join('\n')}`);
+
+        document.getElementById('messengerText').value = blocks.join("\n\n");
+        const box = document.getElementById('messengerReportBox');
+        box.style.display = 'block';
+        box.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function copyToMessenger() {
+        const text = document.getElementById('messengerText');
+        text.select();
+        navigator.clipboard.writeText(text.value).then(() => {
+            showCustomAlert('✅ Copied to clipboard!', 'SUCCESS');
+        }).catch(() => {
+            showCustomAlert('❌ Please copy manually.', 'NOTICE');
+        });
+    }
+</script>
+
+</body>
+</html>
