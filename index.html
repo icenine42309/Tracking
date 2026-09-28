@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cavinti_MDRRMO-Report - Patient Care Form</title>
+    <title>Cavinti ResQ-Track - Patient Care Form</title>
     <style>
         /* THEME VARIABLES */
         [data-theme="dark"] {
@@ -473,7 +473,7 @@
 <div class="container">
     <div class="header">
         <button type="button" id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()">☀️ Light</button>
-        <h2>MUNICIPAL DISASTER RISK REDUCTION AND MANAGEMENT OFFICE</h2>
+        <h2>MUNICIPAL DISASTER RISK MANAGEMENT OFFICE</h2>
         <h3>CAVINTI RESQ-TRACK • PATIENT CARE FORM</h3>
         <span id="autoSaveStatus" class="save-indicator">🟢 Auto-save Active</span>
     </div>
@@ -635,6 +635,26 @@
             <div class="grid-2">
                 <div class="form-group"><label>Team Leader</label><input type="text" id="e-tl"></div>
                 <div class="form-group"><label>Members</label><input type="text" id="e-members"></div>
+            </div>
+            
+            <!-- In-update na OpCen Duty section na may hanggang tatlong pangalan -->
+            <div class="form-group">
+                <label>OpCen Duty (Hanggang 3 Responders)</label>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <input type="text" id="e-opcenduty1" placeholder="Unang OpCen Duty">
+                    <input type="text" id="e-opcenduty2" placeholder="Ikalawang OpCen Duty">
+                    <input type="text" id="e-opcenduty3" placeholder="Ikatlong OpCen Duty">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Team Duty</label>
+                <select id="e-teamduty">
+                    <option value="">-Select Team-</option>
+                    <option value="Team Alpha">Team Alpha</option>
+                    <option value="Team Bravo">Team Bravo</option>
+                    <option value="Team Charlie">Team Charlie</option>
+                </select>
             </div>
             <div class="form-group">
                 <label>Supplies / Equipment Used</label>
@@ -1215,10 +1235,21 @@
         }
 
         let teamArr = [];
-        ['ambulance', 'tl', 'driver', 'members', 'supplies'].forEach(e => {
+        ['ambulance', 'tl', 'driver', 'members', 'teamduty', 'supplies'].forEach(e => {
             let val = document.getElementById(`e-${e}`).value.trim();
-            if (val) teamArr.push(`• ${e.charAt(0).toUpperCase() + e.slice(1)}: ${val}`);
+            if (val) teamArr.push(`• ${e === 'teamduty' ? 'Team Duty' : e.charAt(0).toUpperCase() + e.slice(1)}: ${val}`);
         });
+
+        // Isama ang mga OpCen Duty sa Messenger report kung meron man
+        let opcenDuties = [];
+        ['e-opcenduty1', 'e-opcenduty2', 'e-opcenduty3'].forEach(id => {
+            let val = document.getElementById(id).value.trim();
+            if (val) opcenDuties.push(val);
+        });
+        if (opcenDuties.length > 0) {
+            teamArr.push(`• OpCen Duty: ${opcenDuties.join(', ')}`);
+        }
+
         if (teamArr.length > 0) blocks.push(`👨‍🚒 Responders Team:\n${teamArr.join('\n')}`);
 
         document.getElementById('messengerText').value = blocks.join("\n\n");
