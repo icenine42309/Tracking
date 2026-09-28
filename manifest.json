@@ -1,16 +1,12 @@
 {
-  "name": "AJ Ice Smart Tracker",
-  "short_name": "AJ Tracker",
-  "start_url": "./index.html",
-  "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
-  "description": "A smart tracking tool for managing sales, expenses, and deliveries.",
-  "icons": [
-    {
-      "src": "https://via.placeholder.com/512",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
+  "dir": "ltr",
+  "display": "standalone",
+  "name": "Apps",
+  "orientation": "any",
+  "scope": "/",
+  "short_name": "icenine42309.github",
+  "start_url": "/https://icenine42309.github.io/Tracking/",
+  "theme_color": "#ffffff",
+  "description": "Professional Patient Care Report and Emergency Dispatch Tracking Dashboard for MDRRMO Cavinti."
 }
