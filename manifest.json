@@ -1,12 +1,16 @@
 {
-  "background_color": "#ffffff",
-  "dir": "ltr",
+  "name": "AJ Ice Smart Tracker",
+  "short_name": "AJ Tracker",
+  "start_url": "./index.html",
   "display": "standalone",
-  "name": "MDRRMO_Report",
-  "orientation": "any",
-  "scope": "/",
-  "short_name": "Fill-up_form",
-  "start_url": "/https://icenine42309.github.io/Tracking/",
-  "theme_color": "#ffffff",
-  "description": "Fill yp form for report"
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "description": "A smart tracking tool for managing sales, expenses, and deliveries.",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/512",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
